@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lineage</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0d1117;--panel:#161b22;--line:#2a313c;--text:#e6edf3;--mute:#8b949e;--accent:#7c9cff;--ok:#3fb950;--bad:#f85149;--warn:#d29922;--chip:#1f2630}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:15px/1.55 Inter,system-ui,sans-serif}
+header{padding:22px 28px;border-bottom:1px solid var(--line);display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+h1{margin:0;font-size:22px;letter-spacing:-.3px}h1 span{color:var(--accent)}.tag{color:var(--mute)}
+nav{display:flex;gap:6px;padding:14px 28px 0}nav button{background:none;border:1px solid var(--line);color:var(--mute);padding:8px 14px;border-radius:8px;cursor:pointer;font:inherit}
+nav button.on{color:var(--text);border-color:var(--accent);background:var(--chip)}
+main{padding:20px 28px 60px;max-width:1280px}.tab{display:none}.tab.on{display:block}
+.row{display:flex;gap:10px}input,textarea{flex:1;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:10px;padding:12px 14px;font:inherit}
+textarea{min-height:110px;width:100%;font-family:JetBrains Mono,monospace;font-size:13px}
+.btn{background:var(--accent);color:#0b1020;border:0;border-radius:10px;padding:0 20px;font-weight:600;cursor:pointer;font:inherit;font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 18px}.chips button{background:var(--chip);border:1px solid var(--line);color:var(--mute);border-radius:999px;padding:6px 12px;cursor:pointer;font:inherit;font-size:13px}
+.chips button:hover{color:var(--text)}
+.grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px}@media(max-width:900px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--mute)}
+.card.dim{opacity:.75}.answer{white-space:pre-wrap}
+.cite{color:var(--accent);cursor:pointer;font-family:JetBrains Mono,monospace;font-size:12.5px}
+.path{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:8px 0;padding:10px;background:var(--chip);border-radius:10px}
+.node{background:#222b38;border:1px solid var(--line);border-radius:8px;padding:3px 9px;font-size:13px}
+.edge{font-family:JetBrains Mono,monospace;font-size:11px;color:var(--warn)}.edge.SUPERSEDES{color:var(--bad);font-weight:600}
+.chunk{border-top:1px solid var(--line);padding:9px 0;font-size:13px}.chunk b{font-family:JetBrains Mono,monospace;font-size:12px;color:var(--mute)}
+.alert{border-radius:12px;padding:18px;margin-top:16px;border:1px solid}.alert.bad{border-color:var(--bad);background:#2a1214}.alert.ok{border-color:var(--ok);background:#0f2416}
+.alert h2{margin:0 0 6px;font-size:18px}.trail{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:12px}
+.step{background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:4px 10px;font-size:12.5px;cursor:pointer}
+.arrow{color:var(--mute)}.muted{color:var(--mute)}.loading{color:var(--mute);font-style:italic}
+.tl{display:grid;gap:14px}.dec{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.pill{padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600}.pill.active{background:#0f2416;color:var(--ok);border:1px solid var(--ok)}
+.pill.superseded{background:#2a1214;color:var(--bad);border:1px solid var(--bad);text-decoration:line-through}
+#modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;padding:20px}
+#modal pre{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px;max-width:720px;max-height:80vh;overflow:auto;white-space:pre-wrap;font:13px/1.6 JetBrains Mono,monospace}
+</style>
+</head>
+<body>
+<header><h1>Line<span>age</span></h1><div class="tag">The company brain that knows what changed. Powered by HydraDB context graphs.</div></header>
+<nav><button class="on" data-t="ask">Ask why</button><button data-t="radar">Contradiction radar</button><button data-t="tl">Decision timeline</button></nav>
+<main>
+<section id="ask" class="tab on">
+  <div class="row"><input id="q" placeholder="Ask the company brain a question" value="Why did we move orders-service off Postgres?"><button class="btn" onclick="ask()">Ask</button></div>
+  <div class="chips">
+    <button onclick="ask('Why did we move orders-service off Postgres?')">Why did we move off Postgres?</button>
+    <button onclick="ask('What is the current price of the Pro plan and why did it change?')">Current Pro price and why?</button>
+    <button onclick="ask('Who owns the DynamoDB migration and what is the deadline?')">Who owns the migration?</button>
+    <button onclick="ask('Can I add a new Postgres table to orders-service?')">Can I add a Postgres table to orders?</button>
+  </div>
+  <div id="askOut"></div>
+</section>
+<section id="radar" class="tab">
+  <p class="muted">Paste a PR, a draft, or a message. Lineage checks it against every active decision and flags work built on superseded ones.</p>
+  <div class="chips">
+    <button onclick="preset(0)">PR #318 (orders_audit table)</button>
+    <button onclick="preset(1)">Landing page draft</button>
+    <button onclick="preset(2)">Safe change</button>
+  </div>
+  <textarea id="work"></textarea>
+  <div style="margin-top:10px"><button class="btn" style="padding:12px 20px" onclick="check()">Check against company brain</button></div>
+  <div id="radarOut"></div>
+</section>
+<section id="tl" class="tab"><div id="tlOut" class="tl"></div></section>
+</main>
+<div id="modal" onclick="this.style.display='none'"><pre id="modalText"></pre></div>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav button,.tab').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');$('#'+b.dataset.t).classList.add('on');if(b.dataset.t==='tl')timeline();});
+async function openDoc(id){const r=await fetch('/api/doc/'+id);const d=await r.json();$('#modalText').textContent=d.text;$('#modal').style.display='flex';}
+const linkify=t=>esc(t).replace(/\[([^\]]+)\]/g,(m,inner)=>{const ids=inner.split(/[;,]\s*/).map(s=>s.trim().replace(/\.md$/,''));if(!ids.every(i=>/^[a-z0-9_]+$/i.test(i)))return m;return ids.map(id=>`<span class="cite" onclick="openDoc('${id}')">[${id}]</span>`).join(' ');});
+const pathHtml=p=>`<div class="path">${p.map((h,i)=>`${i===0?`<span class="node">${esc(h.from)}</span>`:''}<span class="edge ${esc(h.edge)}">${esc(h.edge)} →</span><span class="node">${esc(h.to)}</span>`).join('')}</div>`;
+async function ask(q){q=q||$('#q').value;$('#q').value=q;$('#askOut').innerHTML='<p class="loading">Traversing the context graph...</p>';
+  const d=await (await fetch('/api/ask?q='+encodeURIComponent(q))).json();
+  $('#askOut').innerHTML=`<div class="grid">
+   <div class="card"><h3>With HydraDB graph context</h3><div class="answer">${linkify(d.answer)}</div>
+     <h3 style="margin-top:18px">Reasoning paths (${d.paths.length})</h3>${d.paths.map(pathHtml).join('')||'<p class="muted">No paths</p>'}</div>
+   <div class="card dim"><h3>Plain retrieval (no graph)</h3><p class="muted">Disconnected chunks. The reader has to connect them.</p>
+     ${d.baseline_chunks.map(c=>`<div class="chunk"><b>${esc(c.source)}</b><br>${esc(c.text)}</div>`).join('')}</div></div>`;}
+const PRESETS=[
+`Pull Request #318: Add orders_audit table
+Service: orders-service
+Adds a new Postgres table orders_audit to log every order state change.
+Migration: 0042_create_orders_audit.sql`,
+`Landing page: Nimbus Pro
+Everything your team needs for $49 per seat per month. Start your free trial.`,
+`Pull Request #322: Add retry with backoff to billing-service invoice export job.
+No schema changes.`];
+function preset(i){$('#work').value=PRESETS[i];}
+async function check(){$('#radarOut').innerHTML='<p class="loading">Checking against active decisions...</p>';
+  const v=await (await fetch('/api/check',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:$('#work').value})})).json();
+  const dec=v.decision;
+  $('#radarOut').innerHTML=v.conflict?`<div class="alert bad"><h2>⚠ Conflicts with ${esc(dec?dec.title:v.decision_id)}</h2>
+    <div>${linkify(v.explanation)}</div>
+    ${v.superseded_id?`<p class="muted">Relies on superseded decision: <b>${esc(v.superseded_id)}</b></p>`:''}
+    ${v.suggested_fix?`<p><b>Suggested fix:</b> ${esc(v.suggested_fix)}</p>`:''}
+    <div class="trail">${(v.trail||[]).map((s,i)=>`${i?'<span class="arrow">→</span>':''}<span class="step" onclick="openDoc('${s.doc}')">${esc(s.title)}</span>`).join('')}</div></div>`
+   :`<div class="alert ok"><h2>✓ No conflicts</h2><div>${esc(v.explanation)}</div></div>`;}
+async function timeline(){const ds=await (await fetch('/api/decisions')).json();
+  const active=ds.filter(d=>d.status==='active');
+  $('#tlOut').innerHTML=active.map(a=>{const old=ds.filter(d=>d.superseded_by===a.id);
+   return `<div class="card"><h3>${esc(a.scope)}</h3><div class="dec">${old.map(o=>`<span class="pill superseded">${esc(o.title)} · ${o.date}</span><span class="arrow">→</span>`).join('')}
+   <span class="pill active">${esc(a.title)} · ${a.date}</span></div>
+   <div class="trail">${(a.trail||[]).map((d,i)=>`${i?'<span class="arrow">→</span>':''}<span class="step" onclick="openDoc('${d}')">${esc(d)}</span>`).join('')}</div></div>`}).join('');}
+preset(0);
+fetch('/api/eval').then(r=>r.json()).then(e=>{if(!e.n)return;
+  const bar=(v,c)=>`<div style="flex:1;background:var(--chip);border-radius:6px;height:10px"><div style="width:${100*v/e.n}%;background:${c};height:100%;border-radius:6px"></div></div>`;
+  $('header').insertAdjacentHTML('beforeend',`<div style="margin-left:auto;min-width:300px;font-size:13px">
+   <div style="display:flex;gap:10px;align-items:center"><span style="width:120px">With graph</span>${bar(e.on,'var(--ok)')}<b>${e.on}/${e.n}</b></div>
+   <div style="display:flex;gap:10px;align-items:center;margin-top:4px"><span style="width:120px" class="muted">Plain retrieval</span>${bar(e.off,'var(--mute)')}<b class="muted">${e.off}/${e.n}</b></div></div>`);});
+</script>
+</body>
+</html>

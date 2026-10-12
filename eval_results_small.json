@@ -1,0 +1,175 @@
+{
+  "on": 10,
+  "off": 10,
+  "n": 10,
+  "graph_on": [
+    {
+      "q": "Why did orders-service move off Postgres?",
+      "must": [
+        "INC-042",
+        "DynamoDB"
+      ],
+      "pass": true,
+      "answer": "The decision to move the orders-service off Postgres was driven by the incident identified as INC-042. During the Summer Sale preview on 2026-06-12, orders-service experienced a severe write throughput bottleneck when it reached 9,000 writes per second, causing a 38-minute checkout failure due to the saturation of the single Postgres primary and lock contention [inc_042.md]. The root cause analysis indicated that the existing Postgres setup, established under ADR-001, could not handle burst writes beyond roughly 5,000 per second [inc_042.md]. As a result, Priya Shah proposed transitioning to DynamoDB to leverage its on-demand capacity and eliminate the single point of failure [slack_infra_0620.md]. This change was formalized in ADR-007, which superseded ADR-001 specifically for the orders-service, mandating its migration to DynamoDB [adr_007.md]."
+    },
+    {
+      "q": "Who owns the orders-service migration and when is it due?",
+      "must": [
+        "Marcus",
+        "Q4"
+      ],
+      "pass": true,
+      "answer": "Marcus Lee owns the orders-service migration to DynamoDB, which is due by the end of Q4 2026 [adr_007.md] [meeting_arch_0702.md]. This migration was decided upon following the incident INC-042 that demonstrated the limitations of the previous design under ADR-001, which used a single Postgres primary database causing performance bottlenecks during high write periods [inc_042.md] [slack_infra_0620.md]. ADR-007 superseded ADR-001 for orders-service, formalizing the switch to DynamoDB to address scalability issues [adr_007.md] [adr_001.md]."
+    },
+    {
+      "q": "What is the current price of the Pro plan?",
+      "must": [
+        "39"
+      ],
+      "pass": true,
+      "answer": "The current price of the Pro plan is $39 per seat per month, plus usage-based overage. This decision, made by CEO Ana Torres and motivated by sales churn feedback from August, superseded the previous flat price of $49 per seat per month on September 1, 2026 [pricing_decision_0901.md]. Although a landing page drafted on October 8, 2026, still advertises the plan at $49 per seat per month, this information is outdated and does not reflect the current pricing [marketing_draft_1008.md]."
+    },
+    {
+      "q": "Which incident led to the decision that superseded ADR-001?",
+      "must": [
+        "INC-042"
+      ],
+      "pass": true,
+      "answer": "The incident that led to the decision superseding ADR-001 was INC-042, which involved an orders write bottleneck during the Summer Sale preview on June 12, 2026. The orders-service experienced writes hitting 9,000 per second, saturating the single Postgres primary and causing checkout failures for 38 minutes. The root cause identified was the single-primary design from ADR-001, unable to handle burst writes above approximately 5,000 per second [inc_042.md]. This incident motivated Priya Shah to decide on migrating the orders-service to DynamoDB as documented in ADR-007, thereby superseding ADR-001 for the orders-service [adr_007.md]."
+    },
+    {
+      "q": "Who made the decision that replaced the original Pro pricing?",
+      "must": [
+        "Ana"
+      ],
+      "pass": true,
+      "answer": "The decision to replace the original Pro pricing was made by Ana Torres, the CEO. On September 1, 2026, Ana Torres updated the Pro plan to be priced at $39 per seat per month plus a usage-based overage, retiring the previous $49 flat price model. This change was motivated by feedback related to sales churn observed in August 2026 [pricing_decision_0901.md]. Prior to this change, Ana Torres also made the initial decision on April 5, 2026, setting the Pro plan at $49 per seat per month [pricing_memo_0405.md]."
+    },
+    {
+      "q": "Is PR #318 consistent with current architecture decisions? Which decision applies?",
+      "must": [
+        "ADR-007"
+      ],
+      "pass": true,
+      "answer": "PR #318, which adds a new Postgres table `orders_audit` for the orders-service, is inconsistent with current architecture decisions. The decision applicable here is ADR-007, decided by Priya Shah on September 3, 2026, which mandates migrating the orders-service to DynamoDB and prohibits creating new Postgres tables for the orders-service [adr_007.md]. This decision superseded ADR-001, which initially allowed the use of Postgres for the orders-service, due to incidents that highlighted the limitations of Postgres for handling high write-throughput [adr_001.md] [inc_042.md]. The architecture review meeting on July 2, 2026, further solidified this approach by ruling out new Postgres tables for orders-service and directing all new order data to DynamoDB [meeting_arch_0702.md]. Therefore, PR #318 conflicts with the current decision to eliminate Postgres dependencies for the orders-service [pr_318.md]."
+    },
+    {
+      "q": "Who was on-call during the incident that motivated ADR-007?",
+      "must": [
+        "James"
+      ],
+      "pass": true,
+      "answer": "James Okafor was on-call during the incident that motivated ADR-007 [inc_042.md]."
+    },
+    {
+      "q": "Which service stays on Postgres after the migration decision?",
+      "must": [
+        "billing"
+      ],
+      "pass": true,
+      "answer": "The billing-service stays on Postgres after the migration decision. This was decided in the Architecture Review Meeting on July 2, 2026, where it was confirmed that while the orders-service would move to DynamoDB, the billing-service would remain on Postgres [meeting_arch_0702.md]. This decision is further formalized in ADR-007, which explicitly states that the billing-service remains on Postgres under ADR-001 [adr_007.md]. The migration of the orders-service to DynamoDB was motivated by the incident INC-042, which exposed limitations in using a single Postgres primary for high write throughput scenarios [slack_infra_0620.md]."
+    },
+    {
+      "q": "Is the price on the landing page draft correct? What should it be?",
+      "must": [
+        "39"
+      ],
+      "pass": true,
+      "answer": "The price on the landing page draft, which lists the Pro plan at $49 per seat per month, is incorrect. This pricing was initially set on April 5, 2026, during the launch of the Pro plan [pricing_memo_0405.md]. However, a decision on September 1, 2026, by CEO Ana Torres, superseded this by adjusting the Pro plan pricing to $39 per seat per month, with additional usage-based overage fees [pricing_decision_0901.md]. This change was influenced by feedback regarding sales churn [slack_sales_0815.md]. Therefore, the landing page should reflect the updated price of $39 per seat per month [pricing_decision_0901.md]."
+    },
+    {
+      "q": "Who first proposed DynamoDB, and in which channel?",
+      "must": [
+        "Priya",
+        "infra"
+      ],
+      "pass": true,
+      "answer": "Priya Shah first proposed moving the orders-service to DynamoDB in the Slack #infra channel on June 20, 2026. This proposal was a response to the issues identified in incident INC-042, which highlighted the limitations of the current Postgres setup [slack_infra_0620.md]."
+    }
+  ],
+  "graph_off": [
+    {
+      "q": "Why did orders-service move off Postgres?",
+      "must": [
+        "INC-042",
+        "DynamoDB"
+      ],
+      "pass": true,
+      "answer": "The orders-service moved off Postgres due to a significant performance issue identified during Incident INC-042. During the Summer Sale preview, the orders-service experienced a severe bottleneck as writes peaked at 9,000 per second, overwhelming the single Postgres primary and causing a service outage [inc_042.md]. The root cause was the single-primary design adopted from an earlier decision (ADR-001), which was only able to handle around 5,000 writes per second [adr_001.md]. Consequently, a decision was made by Priya Shah to migrate to DynamoDB, which could handle bursts in write capacity without a central point of contention [adr_007.md][slack_infra_0620.md]. This decision was documented in ADR-007 and involved transitioning all order data to DynamoDB while leaving the billing-service on Postgres [meeting_arch_0702.md]."
+    },
+    {
+      "q": "Who owns the orders-service migration and when is it due?",
+      "must": [
+        "Marcus",
+        "Q4"
+      ],
+      "pass": true,
+      "answer": "Marcus Lee owns the orders-service migration, which is due at the end of Q4 2026 [adr_007.md]. This decision was made following Incident INC-042, which highlighted the limitations of using Postgres for handling burst writes due to its single-primary design [inc_042.md]. As a result, Priya Shah decided on the migration to DynamoDB to address these issues [slack_infra_0620.md]. The migration plan was formalized in ADR-007, which supersedes the earlier ADR-001 for the orders-service [adr_007.md]."
+    },
+    {
+      "q": "What is the current price of the Pro plan?",
+      "must": [
+        "39"
+      ],
+      "pass": true,
+      "answer": "The current price of the Pro plan is $39 per seat per month, plus usage-based overage fees. This decision, made by Ana Torres (CEO) on September 1, 2026, supersedes the previous flat price of $49 per seat per month, as outlined in the Pricing Memo from April 5, 2026. The change was motivated by sales churn feedback from August, where it was noted that the $49 price was too high for light users [pricing_decision_0901.md]."
+    },
+    {
+      "q": "Which incident led to the decision that superseded ADR-001?",
+      "must": [
+        "INC-042"
+      ],
+      "pass": true,
+      "answer": "The incident that led to the decision superseding ADR-001 was the orders write bottleneck identified as Incident INC-042 [inc_042.md]. During the Summer Sale preview, the orders-service experienced severe write saturation, with the Postgres primary unable to handle burst writes exceeding 5,000 per second, causing a checkout failure for 38 minutes [inc_042.md]. Priya Shah led the decision to migrate the orders-service to DynamoDB to address these scalability issues, as documented in ADR-007, which supersedes ADR-001 for the orders-service [adr_007.md]. This change was finalized during an architecture review meeting where Priya Shah was present, and Marcus Lee was appointed to lead the migration [meeting_arch_0702.md]."
+    },
+    {
+      "q": "Who made the decision that replaced the original Pro pricing?",
+      "must": [
+        "Ana"
+      ],
+      "pass": true,
+      "answer": "Ana Torres, the CEO, made the decision to update the Pro plan pricing on September 1, 2026. The new pricing was set at $39 per seat per month with additional usage-based overage fees. This decision superseded the original flat pricing of $49 per seat per month, which was introduced on April 5, 2026. The change was motivated by feedback about sales churn from August [1][2]."
+    },
+    {
+      "q": "Is PR #318 consistent with current architecture decisions? Which decision applies?",
+      "must": [
+        "ADR-007"
+      ],
+      "pass": true,
+      "answer": "PR #318, which adds a new Postgres table `orders_audit` to the orders-service, is not consistent with the current architecture decisions. The decision relevant here is ADR-007, dated 2026-09-03, which states that the orders-service must migrate to DynamoDB with on-demand capacity and expressly prohibits the creation of new Postgres tables for the orders-service [adr_007.md]. This decision superseded ADR-001, which initially designated Postgres as the primary datastore for both orders and billing services [adr_001.md]. ADR-007 was motivated by the need to handle burst writes and remove the single point of failure identified in incident INC-042 [slack_infra_0620.md]. Dev Raman's contributions in PR #318 must align with the ADR-007 directive, indicating a need to revise this PR for compliance."
+    },
+    {
+      "q": "Who was on-call during the incident that motivated ADR-007?",
+      "must": [
+        "James"
+      ],
+      "pass": true,
+      "answer": "James Okafor was on-call during the incident (INC-042) that motivated ADR-007 [inc_042.md]."
+    },
+    {
+      "q": "Which service stays on Postgres after the migration decision?",
+      "must": [
+        "billing"
+      ],
+      "pass": true,
+      "answer": "The billing-service remains on Postgres after the migration decision. This decision was part of Architecture Decision Record ADR-007, where it was decided that only the orders-service would migrate to DynamoDB, motivated by the need to address issues identified in Incident INC-042. ADR-007 supersedes ADR-001 only in relation to the orders-service, thus allowing the billing-service to continue using Postgres as specified in ADR-001 [adr_007.md][meeting_arch_0702.md]."
+    },
+    {
+      "q": "Is the price on the landing page draft correct? What should it be?",
+      "must": [
+        "39"
+      ],
+      "pass": true,
+      "answer": "The price on the landing page draft is not correct. The landing page draft authored by Lena Park on 2026-10-08 indicates a price of $49 per seat per month for the Pro plan [marketing_draft_1008.md]. However, this pricing was superseded by a decision made on 2026-09-01 by Ana Torres, the CEO. The updated decision set the Pro plan price to $39 per seat per month, with additional usage-based overage fees, replacing the $49 flat price [pricing_decision_0901.md]. Therefore, the landing page should be updated to reflect the $39 price."
+    },
+    {
+      "q": "Who first proposed DynamoDB, and in which channel?",
+      "must": [
+        "Priya",
+        "infra"
+      ],
+      "pass": true,
+      "answer": "Priya Shah first proposed moving orders-service to DynamoDB in the Slack #infra thread on June 20, 2026. This proposal followed the incident INC-042, which highlighted issues with the existing Postgres setup during high write loads [slack_infra_0620.md]."
+    }
+  ]
+}
