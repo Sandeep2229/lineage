@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "ana": {
+      "name": "Ana Torres",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "price_49": {
+      "name": "Pro plan $49 flat",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "pro_plan": {
+      "name": "Pro plan",
+      "type": "PRODUCT",
+      "namespace": "products"
+    }
+  },
+  "relations": [
+    {
+      "source": "price_49",
+      "target": "ana",
+      "predicate": "DECIDED_BY",
+      "context": "Ana Torres set Pro at $49 flat on 2026-04-05."
+    },
+    {
+      "source": "price_49",
+      "target": "pro_plan",
+      "predicate": "AFFECTS",
+      "context": "Pricing for the Pro plan."
+    }
+  ]
+}

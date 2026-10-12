@@ -1,0 +1,55 @@
+{
+  "entities": {
+    "adr_001": {
+      "name": "ADR-001 Use Postgres",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "billing": {
+      "name": "billing-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    },
+    "orders": {
+      "name": "orders-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    },
+    "postgres": {
+      "name": "Postgres",
+      "type": "TECHNOLOGY",
+      "namespace": "tech"
+    },
+    "priya": {
+      "name": "Priya Shah",
+      "type": "PERSON",
+      "namespace": "people"
+    }
+  },
+  "relations": [
+    {
+      "source": "adr_001",
+      "target": "priya",
+      "predicate": "DECIDED_BY",
+      "context": "Priya Shah decided ADR-001 on 2026-03-01."
+    },
+    {
+      "source": "adr_001",
+      "target": "postgres",
+      "predicate": "CHOOSES",
+      "context": "ADR-001 chose Postgres as primary datastore."
+    },
+    {
+      "source": "adr_001",
+      "target": "orders",
+      "predicate": "AFFECTS",
+      "context": "ADR-001 put orders-service on Postgres."
+    },
+    {
+      "source": "adr_001",
+      "target": "billing",
+      "predicate": "AFFECTS",
+      "context": "ADR-001 put billing-service on Postgres."
+    }
+  ]
+}

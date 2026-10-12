@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "dev": {
+      "name": "Dev Raman",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "orders": {
+      "name": "orders-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    },
+    "postgres": {
+      "name": "Postgres",
+      "type": "TECHNOLOGY",
+      "namespace": "tech"
+    },
+    "pr_318": {
+      "name": "PR #318 Add orders_audit Postgres table",
+      "type": "CHANGE",
+      "namespace": "changes"
+    }
+  },
+  "relations": [
+    {
+      "source": "dev",
+      "target": "pr_318",
+      "predicate": "AUTHORED",
+      "context": "Dev Raman opened PR #318 on 2026-10-10."
+    },
+    {
+      "source": "pr_318",
+      "target": "orders",
+      "predicate": "AFFECTS",
+      "context": "PR #318 changes orders-service."
+    },
+    {
+      "source": "pr_318",
+      "target": "postgres",
+      "predicate": "USES",
+      "context": "PR #318 adds a new Postgres table orders_audit."
+    }
+  ]
+}

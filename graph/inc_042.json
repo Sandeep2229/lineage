@@ -1,0 +1,44 @@
+{
+  "entities": {
+    "adr_001": {
+      "name": "ADR-001 Use Postgres",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "inc_042": {
+      "name": "INC-042 Orders write bottleneck",
+      "type": "INCIDENT",
+      "namespace": "incidents"
+    },
+    "james": {
+      "name": "James Okafor",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "orders": {
+      "name": "orders-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    }
+  },
+  "relations": [
+    {
+      "source": "inc_042",
+      "target": "adr_001",
+      "predicate": "CAUSED_BY",
+      "context": "INC-042 root cause: ADR-001 single Postgres primary cannot absorb burst writes."
+    },
+    {
+      "source": "inc_042",
+      "target": "orders",
+      "predicate": "AFFECTS",
+      "context": "INC-042 broke checkout in orders-service for 38 minutes on 2026-06-12."
+    },
+    {
+      "source": "james",
+      "target": "inc_042",
+      "predicate": "RESPONDED_TO",
+      "context": "James Okafor was on-call for INC-042."
+    }
+  ]
+}

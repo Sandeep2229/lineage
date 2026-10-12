@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "lena": {
+      "name": "Lena Park",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "mkt_draft": {
+      "name": "Landing page draft Pro plan",
+      "type": "CHANGE",
+      "namespace": "changes"
+    },
+    "pro_plan": {
+      "name": "Pro plan",
+      "type": "PRODUCT",
+      "namespace": "products"
+    }
+  },
+  "relations": [
+    {
+      "source": "lena",
+      "target": "mkt_draft",
+      "predicate": "AUTHORED",
+      "context": "Lena Park drafted the landing page on 2026-10-08."
+    },
+    {
+      "source": "mkt_draft",
+      "target": "pro_plan",
+      "predicate": "AFFECTS",
+      "context": "Landing page advertises the Pro plan at $49."
+    }
+  ]
+}

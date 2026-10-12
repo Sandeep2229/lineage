@@ -1,0 +1,48 @@
+[
+  {
+    "id": "adr_001",
+    "title": "ADR-001 Use Postgres",
+    "status": "superseded",
+    "superseded_by": "adr_007",
+    "scope": "orders-service",
+    "date": "2026-03-01",
+    "doc": "adr_001"
+  },
+  {
+    "id": "adr_007",
+    "title": "ADR-007 Migrate orders-service to DynamoDB; no new Postgres tables for orders-service",
+    "status": "active",
+    "scope": "orders-service",
+    "date": "2026-09-03",
+    "doc": "adr_007",
+    "trail": [
+      "adr_001",
+      "inc_042",
+      "slack_infra_0620",
+      "meeting_arch_0702",
+      "adr_007"
+    ]
+  },
+  {
+    "id": "price_49",
+    "title": "Pro plan $49 flat",
+    "status": "superseded",
+    "superseded_by": "price_39",
+    "scope": "Pro plan pricing",
+    "date": "2026-04-05",
+    "doc": "pricing_memo_0405"
+  },
+  {
+    "id": "price_39",
+    "title": "Pro plan $39 per seat plus usage; all public pages must show $39",
+    "status": "active",
+    "scope": "Pro plan pricing",
+    "date": "2026-09-01",
+    "doc": "pricing_decision_0901",
+    "trail": [
+      "pricing_memo_0405",
+      "slack_sales_0815",
+      "pricing_decision_0901"
+    ]
+  }
+]

@@ -1,0 +1,77 @@
+{
+  "entities": {
+    "adr_001": {
+      "name": "ADR-001 Use Postgres",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "adr_007": {
+      "name": "ADR-007 Migrate orders to DynamoDB",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "arch_rule": {
+      "name": "No new Postgres tables for orders-service",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "dynamo": {
+      "name": "DynamoDB",
+      "type": "TECHNOLOGY",
+      "namespace": "tech"
+    },
+    "inc_042": {
+      "name": "INC-042 Orders write bottleneck",
+      "type": "INCIDENT",
+      "namespace": "incidents"
+    },
+    "orders": {
+      "name": "orders-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    },
+    "priya": {
+      "name": "Priya Shah",
+      "type": "PERSON",
+      "namespace": "people"
+    }
+  },
+  "relations": [
+    {
+      "source": "adr_007",
+      "target": "adr_001",
+      "predicate": "SUPERSEDES",
+      "context": "ADR-007 (2026-09-03) supersedes ADR-001 for orders-service only."
+    },
+    {
+      "source": "adr_007",
+      "target": "inc_042",
+      "predicate": "MOTIVATED_BY",
+      "context": "ADR-007 was motivated by INC-042."
+    },
+    {
+      "source": "adr_007",
+      "target": "priya",
+      "predicate": "DECIDED_BY",
+      "context": "Priya Shah wrote ADR-007."
+    },
+    {
+      "source": "adr_007",
+      "target": "dynamo",
+      "predicate": "CHOOSES",
+      "context": "ADR-007 moves orders-service to DynamoDB."
+    },
+    {
+      "source": "adr_007",
+      "target": "orders",
+      "predicate": "AFFECTS",
+      "context": "ADR-007 applies to orders-service."
+    },
+    {
+      "source": "adr_007",
+      "target": "arch_rule",
+      "predicate": "FORMALIZES",
+      "context": "ADR-007 formalizes the arch review rule."
+    }
+  ]
+}

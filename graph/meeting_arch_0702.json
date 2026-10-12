@@ -1,0 +1,60 @@
+{
+  "entities": {
+    "adr_007": {
+      "name": "ADR-007 Migrate orders to DynamoDB",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "arch_review": {
+      "name": "Architecture Review 2026-07-02",
+      "type": "MEETING",
+      "namespace": "meetings"
+    },
+    "arch_rule": {
+      "name": "No new Postgres tables for orders-service",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "marcus": {
+      "name": "Marcus Lee",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "orders": {
+      "name": "orders-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    },
+    "slack_infra": {
+      "name": "Slack #infra thread 2026-06-20",
+      "type": "DISCUSSION",
+      "namespace": "discussions"
+    }
+  },
+  "relations": [
+    {
+      "source": "arch_rule",
+      "target": "arch_review",
+      "predicate": "DECIDED_IN",
+      "context": "Arch review on 2026-07-02 ruled no new Postgres tables for orders-service."
+    },
+    {
+      "source": "arch_review",
+      "target": "slack_infra",
+      "predicate": "FOLLOWS",
+      "context": "The arch review settled the #infra debate."
+    },
+    {
+      "source": "marcus",
+      "target": "adr_007",
+      "predicate": "OWNS",
+      "context": "Marcus Lee owns the DynamoDB migration, due end of Q4 2026."
+    },
+    {
+      "source": "arch_rule",
+      "target": "orders",
+      "predicate": "AFFECTS",
+      "context": "Rule applies to orders-service."
+    }
+  ]
+}

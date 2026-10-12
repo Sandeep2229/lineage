@@ -1,0 +1,22 @@
+{
+  "entities": {
+    "marcus": {
+      "name": "Marcus Lee",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "orders": {
+      "name": "orders-service",
+      "type": "SERVICE",
+      "namespace": "services"
+    }
+  },
+  "relations": [
+    {
+      "source": "marcus",
+      "target": "orders",
+      "predicate": "LEADS",
+      "context": "Marcus Lee leads the orders-service migration team."
+    }
+  ]
+}

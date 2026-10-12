@@ -1,0 +1,33 @@
+{
+  "entities": {
+    "kenji": {
+      "name": "Kenji Mori",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "price_49": {
+      "name": "Pro plan $49 flat",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "sales_thread": {
+      "name": "Slack #sales thread 2026-08-15",
+      "type": "DISCUSSION",
+      "namespace": "discussions"
+    }
+  },
+  "relations": [
+    {
+      "source": "sales_thread",
+      "target": "price_49",
+      "predicate": "CRITIQUES",
+      "context": "Sales lost deals because $49 flat was too high."
+    },
+    {
+      "source": "kenji",
+      "target": "sales_thread",
+      "predicate": "DISCUSSED_IN",
+      "context": "Kenji Mori reported lost deals."
+    }
+  ]
+}

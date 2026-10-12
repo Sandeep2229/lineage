@@ -1,0 +1,55 @@
+{
+  "entities": {
+    "ana": {
+      "name": "Ana Torres",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "price_39": {
+      "name": "Pro plan $39 plus usage",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "price_49": {
+      "name": "Pro plan $49 flat",
+      "type": "DECISION",
+      "namespace": "decisions"
+    },
+    "pro_plan": {
+      "name": "Pro plan",
+      "type": "PRODUCT",
+      "namespace": "products"
+    },
+    "sales_thread": {
+      "name": "Slack #sales thread 2026-08-15",
+      "type": "DISCUSSION",
+      "namespace": "discussions"
+    }
+  },
+  "relations": [
+    {
+      "source": "price_39",
+      "target": "price_49",
+      "predicate": "SUPERSEDES",
+      "context": "On 2026-09-01 Pro moved to $39 plus usage; $49 retired."
+    },
+    {
+      "source": "price_39",
+      "target": "sales_thread",
+      "predicate": "MOTIVATED_BY",
+      "context": "Motivated by August churn feedback."
+    },
+    {
+      "source": "price_39",
+      "target": "ana",
+      "predicate": "DECIDED_BY",
+      "context": "Ana Torres decided the new price."
+    },
+    {
+      "source": "price_39",
+      "target": "pro_plan",
+      "predicate": "AFFECTS",
+      "context": "Pricing for the Pro plan."
+    }
+  ]
+}

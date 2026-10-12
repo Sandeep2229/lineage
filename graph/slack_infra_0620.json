@@ -1,0 +1,55 @@
+{
+  "entities": {
+    "inc_042": {
+      "name": "INC-042 Orders write bottleneck",
+      "type": "INCIDENT",
+      "namespace": "incidents"
+    },
+    "james": {
+      "name": "James Okafor",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "marcus": {
+      "name": "Marcus Lee",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "priya": {
+      "name": "Priya Shah",
+      "type": "PERSON",
+      "namespace": "people"
+    },
+    "slack_infra": {
+      "name": "Slack #infra thread 2026-06-20",
+      "type": "DISCUSSION",
+      "namespace": "discussions"
+    }
+  },
+  "relations": [
+    {
+      "source": "slack_infra",
+      "target": "inc_042",
+      "predicate": "MOTIVATED_BY",
+      "context": "The #infra debate on 2026-06-20 followed INC-042."
+    },
+    {
+      "source": "priya",
+      "target": "slack_infra",
+      "predicate": "PROPOSED_IN",
+      "context": "Priya proposed moving orders-service to DynamoDB."
+    },
+    {
+      "source": "marcus",
+      "target": "slack_infra",
+      "predicate": "DISCUSSED_IN",
+      "context": "Marcus raised cost and join concerns."
+    },
+    {
+      "source": "james",
+      "target": "slack_infra",
+      "predicate": "DISCUSSED_IN",
+      "context": "James supported DynamoDB from the SRE side."
+    }
+  ]
+}
